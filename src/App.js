@@ -70,7 +70,7 @@ function App() {
                 className={userInfo ? 'main-section  py-4  ms-auto'
                           : 'vh-100 login'}
                   style={{/*backgroundColor: "red",*/}}>
-            <React.Suspense fallback={<div className='bg-danger d-flex justify-content-center'>Loading...</div>}>
+            <React.Suspense fallback={<div className='d-flex justify-content-center'>Loading...</div>}>
             <Routes>
               <Route path='/login' element={userInfo ?  <Navigate to="/" /> : <LoginPage setUserInfo={setUserInfo} />} />
               <Route path='*' element={<PrivateRoute> <NotFound /> </PrivateRoute>} />

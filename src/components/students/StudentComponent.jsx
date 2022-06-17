@@ -28,7 +28,7 @@ export default function StudentComponent () {
   React.useEffect(() => {
     const getStudents = async() => {
       try {
-        const { data } = await axios.get('http://localhost:3000/students');
+        const { data } = await axios.get('https://evaluate-server.netlify.app/students');
         const studs = data.filter(item => item.level==="L1").map(item => item._id);
         console.log(studs);
         setRows(data);

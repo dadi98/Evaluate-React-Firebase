@@ -24,6 +24,8 @@ export default function StudentComponent () {
   const [q, setQ] = React.useState('');
   const [searchParam] = React.useState(["studentId", "firstName", "lastName", "level", "registrationStatus"]);
   
+
+  
   // console.log(rows);
   React.useEffect(() => {
     const getStudents = async() => {

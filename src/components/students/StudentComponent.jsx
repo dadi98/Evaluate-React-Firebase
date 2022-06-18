@@ -30,7 +30,7 @@ export default function StudentComponent () {
   React.useEffect(() => {
     const getStudents = async() => {
       try {
-        const { data } = await axios.get('https://evaluate-server.netlify.app/students', {mode: 'no-cors'});
+        const { data } = await axios.get('https://evaluate-igee.herokuapp.com/students');
         const studs = data.filter(item => item.level==="L1").map(item => item._id);
         console.log(studs);
         console.log(data)

@@ -25,14 +25,15 @@ export default function StudentComponent () {
   const [searchParam] = React.useState(["studentId", "firstName", "lastName", "level", "registrationStatus"]);
   
 
-  
+
   // console.log(rows);
   React.useEffect(() => {
     const getStudents = async() => {
       try {
-        const { data } = await axios.get('https://evaluate-server.netlify.app/students');
+        const { data } = await axios.get('https://evaluate-server.netlify.app/students', {mode: 'no-cors'});
         const studs = data.filter(item => item.level==="L1").map(item => item._id);
         console.log(studs);
+        console.log(data)
         setRows(data);
         //console.log(data);
           return data;

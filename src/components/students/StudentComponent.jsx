@@ -1,12 +1,16 @@
 import * as React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import { db } from '../../firebase/firebase';
+import {
+  collection ,getDocs
+} from 'firebase/firestore'
 
 import { Row, Col, Container, Button, Form, DropdownButton, Dropdown } from 'react-bootstrap';
 
 import AddStudent from './AddStudent';
 import DeleteStudent from './DeleteStudent';
 import EditStudent from './EditStudent';
-import DeleteAll from './DeleteAll';
+//import DeleteAll from './DeleteAll';
 
 export default function StudentComponent () {
 
@@ -15,41 +19,35 @@ export default function StudentComponent () {
 
   const [addModal, setAddModal] = React.useState(false);
   const [deleteModal, setDeleteModal] = React.useState(false);
-  const [deleteAllModal, setDeleteAllModal] = React.useState(false);
+  
   const [editModal, setEditModal] = React.useState(false);
   const [id, setId] = React.useState();
   
   const [refresh, setRefresh] = React.useState(false);
 
   const [q, setQ] = React.useState('');
-  const [searchParam] = React.useState(["studentId", "firstName", "lastName", "level", "registrationStatus"]);
+  const [searchParam] = React.useState(["studentId", "firstName", "lastName", "major"]);
   
 
 
   // console.log(rows);
   React.useEffect(() => {
-    const getStudents = async() => {
-      try {
-        const { data } = await axios.get('https://evaluate-igee.herokuapp.com/students');
-        const studs = data.filter(item => item.level==="L1").map(item => item._id);
-        console.log(studs);
-        console.log(data)
-        setRows(data);
-        //console.log(data);
-          return data;
-      } catch (err) {
-        if(err instanceof Error){
-          setError(err.message);
-          console.log(error)
-          return err.message;
-        }
-      }
-    }
-    
-    getStudents();
-    //getStudents().then(value => (typeof value === "string") ? 
-    //setError(value) : (typeof value === "student[]") ? setRows(value) : setError(value))
-  }, [refresh, addModal, deleteModal, deleteAllModal, editModal, error]);
+    const colRef = collection(db, 'students');
+    getDocs(colRef)
+      .then(snapshot => {
+        // console.log(snapshot.docs)
+        let students = []
+        snapshot.docs.forEach(doc => {
+          students.push({ ...doc.data(), _id: doc.id })
+        })
+        //console.log(students)
+        setRows(students);
+      })
+      .catch(err =>{
+        setError(err.message);
+        console.log(error);
+      })
+    }, [refresh, addModal, deleteModal, editModal, error]);
 
   const Search = (items) => {
     return items.filter(item => 
@@ -97,11 +95,8 @@ export default function StudentComponent () {
               <th>first Name</th>
               <th>Last Name</th>
               <th>Sex</th>
-              <th>Birth Date</th>
-              <th>Birth Place</th>
               <th>Degree</th>
-              <th>Level</th>
-              <th>Registration status</th>
+              <th>Major</th>
             </tr>
           </thead>
           <tbody>
@@ -117,11 +112,8 @@ export default function StudentComponent () {
                 <td>{item.firstName}</td>
                 <td>{item.lastName}</td>
                 <td>{item.sex}</td>
-                <td>{item.birthDate}</td>
-                <td>{item.birthPlace}</td>
                 <td>{item.degree}</td>
-                <td>{item.level}</td>
-                <td>{item.registrationStatus}</td>
+                <td>{item.major}</td>
               </tr>
             ))}
           </tbody>

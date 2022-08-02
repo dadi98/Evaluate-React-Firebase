@@ -1,5 +1,10 @@
 import * as React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import { db } from '../../firebase/firebase';
+import {
+  collection ,getDocs
+} from 'firebase/firestore'
+
 import { useNavigate } from 'react-router-dom'
 import AddPromotion from './AddPromotion';
 import EditPromotion from './EditPromotion';
@@ -25,7 +30,23 @@ export default function PromotionComponent () {
   
   // console.log(rows);
   React.useEffect(() => {
-    const getPromotions = async() => {
+    const colRef = collection(db, 'promotions');
+    getDocs(colRef)
+      .then(snapshot => {
+        // console.log(snapshot.docs)
+        let promos = []
+        snapshot.docs.forEach(doc => {
+          promos.push({ ...doc.data(), _id: doc.id })
+        })
+        //console.log(students)
+        setPromotions(promos);
+      })
+      .catch(err =>{
+        setError(err.message);
+        console.log(error);
+      })
+
+    /*const getPromotions = async() => {
       try {
         const { data } = await axios.get('http://localhost:3000/promotions');
         setPromotions(data);
@@ -38,7 +59,7 @@ export default function PromotionComponent () {
       }
     }
     
-    getPromotions();
+    getPromotions();*/
   }, [addModal, deleteModal, editModal, error, refresh]);
 
   const Search = (items) => {

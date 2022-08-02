@@ -11,10 +11,11 @@ export default function AssignStudents ({promoId, groupId}) {
   const [promotion, setPromotion] = React.useState({});
   const [group, setGroup] = React.useState({/*groupNumber: '', students: []*/});
   const [students, setStudents] = React.useState([]);
+  const inputRef = React.useRef([]);
   //console.log(promotion);
   const [refresh, setRefresh] = React.useState(false);
   const [error, setError] = React.useState('');
-  const inputRef = React.useRef([]);
+  
   /*const [q, setQ] = React.useState('');
   const [searchParam] = React.useState(["name"]);*/
   //const { promoId, groupId } = useParams();
@@ -102,7 +103,7 @@ export default function AssignStudents ({promoId, groupId}) {
         {group && 
         (<>
           <Row className='mx-0'>
-            <Col xs={12} md={6} className='groups-section' style={{/**/height: "41rem"}}>
+            <Col xs={12} md={6} className='groups-section' style={{/**/height: "38rem"}}>
                 <h4 className='groups-section-header'> Add students to group {group.groupNumber} : </h4>
                 <Form onSubmit={addStudents} style={{/**/height: "100%"}}>
                     <ListGroup as="ul" className="groups-section-list-group">
@@ -126,7 +127,7 @@ export default function AssignStudents ({promoId, groupId}) {
                 </Form>
             </Col>
             <Col xs={12} md={6} className=' group-students' >
-              <div style={{width: ''}} className='groups-section' style={{/**/height: "41rem"}}>
+              <div className='groups-section' style={{/**/height: "38rem"}}>
                 <h4 className='groups-section-header'> Group {group.groupNumber} students: </h4>
                 <ListGroup as="ul" className="groups-section-list-group">
                   {group.students && group.students.map(student => (

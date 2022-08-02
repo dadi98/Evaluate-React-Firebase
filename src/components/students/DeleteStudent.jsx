@@ -1,22 +1,25 @@
 import * as React from 'react';
-import axios from 'axios';
-import { Modal, Button} from 'react-bootstrap';
+//import axios from 'axios';
+import { db } from '../../firebase/firebase';
+import { collection, deleteDoc, doc } from 'firebase/firestore';
 
+import { Modal, Button} from 'react-bootstrap';
 
 const DeleteStudent = ({show, onHide, id}) => {
   
-    const deleteStudent = async(e) => {
+    const deleteStudent = (e) => {
       //const id = window.location.hash.substring(1);
       console.log(id);
       e.preventDefault();
-      try {
-        await axios.delete(`http://localhost:3000/students/${id}`)
-  
-      } catch (err) {
-        if(err instanceof Error){
-          console.log(err.message);
-        }
-      }
+      
+      const docRef = doc(db, 'students', id);
+      deleteDoc(docRef)
+        .then(data =>{
+          console.log(data);
+        })
+        .catch(err =>{
+          console.log(err);
+        })
     }
     //console.log(20);
     return (

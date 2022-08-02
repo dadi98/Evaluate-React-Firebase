@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { getAuth, signOut } from 'firebase/auth';
+import { app } from '../firebase/firebase'
+
 import { Routes, Route,  useNavigate } from 'react-router-dom';
 import { Row, Col, Container, Navbar, NavDropdown, Nav, Button } from 'react-bootstrap';
 
@@ -7,9 +10,21 @@ export default function NavBar({user, setUserNull, open, setOpen}){
     const go_To = useNavigate();
 
     const logOut = () => {
-        localStorage.removeItem('user');
-        setUserNull();
-        go_To("/login");
+        const auth = getAuth(app)
+        signOut(auth)
+            .then(() => {
+                console.log('user signed out')
+                localStorage.removeItem('user');
+                setUserNull();
+                go_To("/login");
+                //console.log(2)
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+        
+        //
+        
     }
     /*<div>
                 <nav className="navbar navbar-light bg-light">

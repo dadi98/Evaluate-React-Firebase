@@ -1,16 +1,33 @@
 import * as React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import { db } from '../../firebase/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+
 import { Modal, Container, Row, Col, Button, Form } from 'react-bootstrap';
 
 const AddPromotion = ({show, onHide}) => {
 
-    const [promotion, setPromotion] = React.useState({year: '', degree: '', major: '', numberOfGroups: ''});
+    const [promotion, setPromotion] = React.useState({year: '', degree: '', major: '', numberOfGroups: 0, groups: []});
     
     //console.log(10);
     const addPromotion = async(e) => {
         e.preventDefault();
-      
-        try {
+        
+        for (let i=0; i<promotion.numberOfGroups; i++){
+            promotion.groups.push({groupNumber: i+1, students: []})
+        }
+
+        const colRef = collection(db, 'promotions');
+        //console.log(promotion);
+        addDoc(colRef, promotion)
+            .then(data =>{
+                console.log(data);
+            })
+            .catch(err =>{
+                console.log(err.message);
+            })    
+
+         /*try {
         
         await axios.post('http://localhost:3000/promotions', promotion);
         
@@ -19,7 +36,7 @@ const AddPromotion = ({show, onHide}) => {
                 console.log(err.message);
                 //console.log(err.message);
             }
-        }
+        }*/
     }
     //console.log(11);
     return (

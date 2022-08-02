@@ -1,6 +1,10 @@
 import * as React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import { db } from '../../firebase/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+
 import { Modal, Container, Row, Col, Button, Form } from 'react-bootstrap';
+
 
 const AddStudent = ({show, onHide}) => {
 
@@ -8,24 +12,21 @@ const AddStudent = ({show, onHide}) => {
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [sex, setSex] = React.useState('');
-    const [birthDate, setBirthDate] = React.useState('');
-    const [birthPlace, setBirthPlace] = React.useState('');
     const [degree, setDegree] = React.useState('');
-    const [level, setLevel] = React.useState('');
-    const [registrationStatus, setRegistrationStatus] = React.useState('');
+    const [major, setMajor] = React.useState('');
     //console.log(10);
-    const addStudent = async(e) => {
+    const addStudent = (e) => {
         e.preventDefault();
-        try {
-        await axios.post('http://localhost:3000/students', {studentId ,firstName ,lastName ,sex ,birthDate ,
-                                                            birthPlace ,degree ,level ,registrationStatus })
-        } catch (err) {
-            if(err instanceof Error){
+        const colRef = collection(db, 'students');
+        addDoc(colRef, {studentId ,firstName ,lastName ,sex ,degree ,major})
+            .then(data =>{
+                console.log(data.docs);
+            })
+            .catch(err =>{
                 console.log(err.message);
-                //console.log(err.message);
-            }
-        }
+            })            
     }
+    
     //console.log(11);
     return (
         <div>
@@ -77,55 +78,28 @@ const AddStudent = ({show, onHide}) => {
                 <Row>
                     <Col xs={12} md={6}>
                     <Form.Group className="mb-3" >
-                        <Form.Label>Birth date</Form.Label>
-                        <Form.Control type="date" value={birthDate} 
-                                    onChange={(e) => setBirthDate(e.target.value)}/>
-                    </Form.Group>
-                    </Col>
-                    <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" >
-                        <Form.Label>Birth place</Form.Label>
-                        <Form.Control type="text" placeholder="Birth place" value={birthPlace} 
-                                    onChange={(e) => setBirthPlace(e.target.value)}/>
-                    </Form.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" >
                         <Form.Label>Degree</Form.Label>
                         <Form.Select onChange={(e) => setDegree(e.target.value)} aria-label="degree select">
                             <option >choose..</option>
                             <option value="Licence" >Licence</option>
                             <option value="Master" >Master</option>
-                            
                         </Form.Select>
                     </Form.Group>
                     </Col>
                     <Col xs={12} md={6}>
                     <Form.Group className="mb-3" >
-                        <Form.Label>Promotion</Form.Label>
-                        <Form.Select onChange={e => setLevel(e.target.value)} aria-label="promotion select">
+                        <Form.Label>Major</Form.Label>
+                        <Form.Select onChange={e => setMajor(e.target.value)} aria-label="promotion select">
                             <option >choose..</option>
                             <option value="L1" >L1</option>
                             <option value="L2" >L2</option>
                             <option value="L3" >L3</option>
                             <option value="M1" >M1</option>
                             <option value="M2" >M2</option>
-                            
                         </Form.Select>
                     </Form.Group>
                     </Col>
-                </Row>
-                <Row>
-                    <Col xs={12} md={6}>
-                    <Form.Group className="mb-3" >
-                        <Form.Label>Registration status</Form.Label>
-                        <Form.Control type="text" placeholder="Registration status" value={registrationStatus} 
-                                    onChange={e => setRegistrationStatus(e.target.value)}/>
-                    </Form.Group>
-                    </Col>
-                </Row>            
+                </Row>           
                 </Container>
             </Modal.Body>
             <Modal.Footer>

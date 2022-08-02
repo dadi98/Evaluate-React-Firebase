@@ -7,11 +7,12 @@ import LoginPage from './components/LoginPage';
 //import StudentComponent from './components/students/StudentComponent';
 //import CoursesComponent from './components/CoursesComponent';
 import PromotionComponent from './components/promotions/PromotionComponent';
-import GroupComponent from './components/GroupComponent';
+import GroupComponent from './components/groups/GroupComponent';
 import AssignStudents from './components/AssignStudents';
 import GradeComponent from './components/GradeComponent';
 //import DelibirationComponent from './components/DelibirationComponent';
-
+import { getAuth, onAuthStateChanged, Auth } from "firebase/auth";
+import { app } from './firebase/firebase'
 //import Dashboard from './components/Dashboard';
 import NotFound from './components/NotFound';
 import NavBar from './components/NavBar'
@@ -27,19 +28,18 @@ function App() {
   const [userInfo, setUserInfo] = React.useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null);
   const [open, setOpen] = React.useState(false);
   console.log(userInfo);
-  //console.log(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null)
 
+  
+  //console.log(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null)
   function PrivateRoute({ children }) {
-    console.log(children[1].type.name)
+    //console.log(children[1].type.name)
     //return userInfo  ? children : <Navigate to="/login" /> 
     
-      if (userInfo && userInfo.role==="Admin") {
+
+      
+      if (userInfo) {
         return children;
-      } if (userInfo && userInfo.role==="Teacher" && ["GradeComponent", "Dashboard", "NotFound"].includes(children[1].type.name)){
-          return children;
-      } if (userInfo && userInfo.role==="Teacher" && !["GradeComponent", "Dashboard", "NotFound"].includes(children[1].type.name)) {
-            return <Navigate to="/" />;
-      } 
+      }  
       return (<Navigate to="/login" />)
    }
 
@@ -51,7 +51,7 @@ function App() {
     <Container fluid >
         <Row style={{/*backgroundColor: "red",height: '93%'*/}}
               className='bg-secondary'>
-          {userInfo &&
+            {userInfo &&
               <>
                 <Col md={12} className='sticky-top px-0 shadow'>
                   <NavBar user={userInfo} 
@@ -64,12 +64,14 @@ function App() {
                   <SideDialog user={userInfo} open={open}
                               setOpen={() => setOpen(false)}/>
                 </Col>
-              </>}
+                
+              </>
+            }
           
           <Col md={userInfo ? 9 : 12} lg={userInfo ? 10 : 12}
                 className={userInfo ? 'main-section  py-4  ms-auto'
-                          : 'vh-100 login'}
-                  style={{/*backgroundColor: "red",*/}}>
+                                    : 'vh-100 login'}
+                style={{/*backgroundColor: "red",*/}}>
             <React.Suspense fallback={<div className='d-flex justify-content-center'>Loading...</div>}>
             <Routes>
               <Route path='/login' element={userInfo ?  <Navigate to="/" /> : <LoginPage setUserInfo={setUserInfo} />} />

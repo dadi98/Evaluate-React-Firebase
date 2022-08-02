@@ -18,8 +18,7 @@ export default function SideDialog({user, open, setOpen}){
         <>  
             <Collapse in={open} className='d-md-block sidebar-collapse'>
             <div  className='' >
-            {user.role==='Admin' ?
-                (<Nav id='sidebar' avtiveKey='dash' className="flex-column " 
+           <Nav id='sidebar' avtiveKey='dash' className="flex-column " 
                       onSelect={() => setOpen()}>
                     <Nav.Link className={location.pathname=='/' ?  "Nav-Link Link-active" : "Nav-Link"} eventKey=''  
                               onClick={() => navigate('/')} >
@@ -42,16 +41,7 @@ export default function SideDialog({user, open, setOpen}){
                     <Nav.Link className={location.pathname=='/signup' ?  "Nav-Link Link-active" : "Nav-Link"} eventKey=''
                              onClick={() => navigate('/signup')} >
                         <FontAwesomeIcon icon={faPeopleGroup} /> <span>Users</span>  </Nav.Link>
-                </Nav>)     :
-                (<Nav id='sidebar' className="flex-column ">
-                    <Nav.Link className={location.pathname=='/' ?  "Nav-Link Link-active" : "Nav-Link"} eventKey=''
-                             onClick={() => navigate('/')} >
-                        <FontAwesomeIcon icon={faHouse} /> <span>Home</span> </Nav.Link>
-                    <Nav.Link className={location.pathname=='/grades' ?  "Nav-Link Link-active" : "Nav-Link"} eventKey=''
-                             onClick={() => navigate('/grades')} >
-                        <FontAwesomeIcon icon={faPenClip} /> <span>Evaluation</span> </Nav.Link>
-                </Nav>)
-            }
+                </Nav> 
             </div>
             </Collapse>
         </>
